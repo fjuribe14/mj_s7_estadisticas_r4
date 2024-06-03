@@ -3,8 +3,8 @@ import { BaseConsumer, Logger } from "@ant/framework";
 import { OperacionBi } from "../database/models/OperacionBi";
 import { Data, Payload } from "../../../helpers/types/kafkaResponse";
 
-export class TpCreditoEntRptestConsumer extends BaseConsumer {
-  topic = "tpcreditoentrptest";
+export class TpDebitoEntRptestConsumer extends BaseConsumer {
+  topic = "tpdebitoentrptest";
 
   async handler(_data: any): Promise<any> {
     // async handler(data: Data, payload: EachMessagePayload): Promise<any> {

@@ -5,6 +5,22 @@ import { faker } from "@faker-js/faker";
 
 export class KafkaMesage {
   topic?: string;
+  private amt = 123.45;
+  private channel = "TASK";
+
+  private tpdebitolclInstrm = [
+    "tpdebitoent",
+    "tpdebitoentrptest",
+    "tpdebitosal",
+    "tpdebitosalrptest",
+  ];
+
+  private tpcrebitolclInstrm = [
+    "tpcreditoent",
+    "tpcrebitoentrptest",
+    "tpcrebitosal",
+    "tpcrebitosalrptest",
+  ];
 
   constructor(topic?: string) {
     this.topic = topic || "tpcreditoent";
@@ -18,21 +34,24 @@ export class KafkaMesage {
   }
 
   lclInstrm() {
-    switch (this.topic) {
-      case "tpcreditoent":
-        return "040";
-      default:
-        return "040";
+    if (this.topic) {
+      if (this.tpdebitolclInstrm.includes(this.topic)) return "050";
+      if (this.tpcrebitolclInstrm.includes(this.topic)) return "040";
     }
+
+    return "040";
   }
 
   purp() {
-    switch (this.topic) {
-      case "tpcreditoent":
-        return "220";
-      default:
-        return "220";
+    const debitoPurps = ["001", "002", "003"];
+    const randomPurp = debitoPurps[Math.floor(Math.random() * debitoPurps.length)];
+
+    if (this.topic) {
+      if (this.tpdebitolclInstrm.includes(this.topic)) return randomPurp;
+      if (this.tpcrebitolclInstrm.includes(this.topic)) return "220";
     }
+
+    return "220";
   }
 
   sts() {
@@ -50,7 +69,7 @@ export class KafkaMesage {
               OrgnlMsgId: "0116012021073011253058553026",
               OrgnlCreDtTm: "2024-05-27T11:25:30.423",
               OrgnlNbOfTxs: 1,
-              OrgnlCtrlSum: { Ccy: "VES", Amt: 123.45 },
+              OrgnlCtrlSum: { Ccy: "VES", Amt: this.amt },
               IntrBkSttlmDt: "2024-05-27",
               GrpSts: this.sts(),
             },
@@ -63,13 +82,59 @@ export class KafkaMesage {
                 OrgnlTxId: "011601162021073011253032394204",
                 TxSts: this.sts(),
                 Rsn: "AC01",
-                Amount: { Ccy: "VES", Amt: 123.45 },
+                Amount: { Ccy: "VES", Amt: this.amt },
                 Purp: this.purp(),
                 DbtrAgt: "0116",
                 CdtrAgt: "0174",
                 DbtrAcct: { Tp: "CNTA", Id: "1561231315132132" },
                 CdtrAcct: { Tp: "CNTA", Id: "01741561231315132128" },
                 RmtInf: "BTC - Mensaje de prueba",
+              },
+            ],
+          },
+        };
+      case "tpdebitoent":
+        return {
+          CstmrDrctDbtInitn: {
+            GrpHdr: {
+              MsgId: this.msgId(),
+              CreDtTm: "2024-05-27T18:07:09.198",
+              NbOfTxs: 1,
+              CtrlSum: { Ccy: "VES", Amt: this.amt },
+              IntrBkSttlmDt: "2024-05-27",
+              LclInstrm: this.lclInstrm(),
+              Channel: this.channel,
+            },
+            PmtInf: [
+              {
+                RegId: 1,
+                EndToEndId: this.endToEndId(),
+                ClrSysRef: "VES015701572024052718070949865470",
+                TxId: "015701572024052718070984990676",
+                Amount: { Ccy: "VES", Amt: this.amt },
+                Purp: this.purp(),
+                DbtrAgt: "0157",
+                CdtrAgt: "0001",
+                Dbtr: { Nm: faker.person.fullName(), Id: "V37789462", SchmeNm: "SCID" },
+                DbtrAcct: { Tp: "CNTA", Id: "1561231315132124" },
+                Cdtr: { Nm: faker.person.fullName(), Id: " V01961099", SchmeNm: "SCID" },
+                CdtrAcct: { Tp: "CNTA", Id: "00012831484649473131" },
+                RmtInf: "BTC - Mensaje de prueba",
+                AddtlInf: _.random(100000, 999999),
+                RfrdDocInf: [
+                  {
+                    CdOrPrtry: "CINV",
+                    Nb: "92214782",
+                    RltdDt: "2024-06-03",
+                    RjctDt: "2024-06-03",
+                    DuePyblAmt: { Ccy: "VES", Amt: this.amt },
+                  },
+                  {
+                    CdOrPrtry: "CMCN",
+                    Nb: "32823430",
+                    RltdDt: "2024-06-03",
+                  },
+                ],
               },
             ],
           },
@@ -81,10 +146,10 @@ export class KafkaMesage {
               MsgId: this.msgId(),
               CreDtTm: "2024-05-27T18:07:09.198",
               NbOfTxs: 1,
-              CtrlSum: { Ccy: "VES", Amt: 123.45 },
+              CtrlSum: { Ccy: "VES", Amt: this.amt },
               IntrBkSttlmDt: "2024-05-27",
               LclInstrm: this.lclInstrm(),
-              Channel: "0003",
+              Channel: this.channel,
             },
             PmtInf: [
               {
@@ -92,7 +157,7 @@ export class KafkaMesage {
                 EndToEndId: this.endToEndId(),
                 ClrSysRef: "VES015701572024052718070949865470",
                 TxId: "015701572024052718070984990676",
-                Amount: { Ccy: "VES", Amt: 123.45 },
+                Amount: { Ccy: "VES", Amt: this.amt },
                 Purp: this.purp(),
                 DbtrAgt: "0157",
                 CdtrAgt: "0001",

@@ -1,7 +1,7 @@
 /* eslint-disable indent */
-import { BaseEntity, Column, Entity, PrimaryColumn } from "typeorm";
-import { Data } from "../../types/kafkaResponse";
 import moment from "moment";
+import { Data } from "../../../../helpers/types/kafkaResponse";
+import { BaseEntity, Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity({
   name: "tb_operacion_mon",

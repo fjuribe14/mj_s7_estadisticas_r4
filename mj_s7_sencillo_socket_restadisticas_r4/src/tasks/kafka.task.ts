@@ -4,16 +4,16 @@ import { BaseTask } from "@ant/framework/lib/src/scheduler";
 import { Logger } from "@ant/framework";
 export class KafkaTask extends BaseTask {
   name = "kasfka_task";
-  cronExpression = "*/3 * * * * *";
+  cronExpression = "*/5 * * * * *";
 
   topics = [
     // "tpcreditoent",
     // "tpcreditoentrptest",
     // "tpcreditosal",
     // "tpdebitoent",
+    // "tpdebitoentrptest",
     // "tpdebitosal",
     // "tpcreditosalrptest",
-    // "tpdebitoentrptest",
     // "tpdebitosalrptest",
     // "tpinterent",
     // "tpintersal",

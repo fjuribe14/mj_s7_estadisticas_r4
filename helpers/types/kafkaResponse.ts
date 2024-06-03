@@ -1,4 +1,4 @@
-import { CstmrCdtTrfInitn } from "./operacion";
+import { CstmrCdtTrfInitn, CstmrDrctDbtInitn } from "./operacion";
 import { CstmrPmtStsRpt } from "./estatusReport";
 
 export interface KafkaResponse {
@@ -9,6 +9,7 @@ export interface KafkaResponse {
 export interface Data {
   CstmrCdtTrfInitn?: CstmrCdtTrfInitn;
   CstmrPmtStsRpt?: CstmrPmtStsRpt;
+  CstmrDrctDbtInitn?: CstmrDrctDbtInitn;
 }
 
 export interface Payload {

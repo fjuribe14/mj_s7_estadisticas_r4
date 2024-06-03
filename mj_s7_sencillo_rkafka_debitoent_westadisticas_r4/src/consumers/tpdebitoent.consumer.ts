@@ -1,11 +1,10 @@
 import { EachMessagePayload } from "kafkajs";
 import { BaseConsumer, Logger } from "@ant/framework";
-import { Data, Payload } from "../../../helpers/types/kafkaResponse";
 import { OperacionBi } from "../database/models/OperacionBi";
-// import { OperacionMon } from "../database/models/OperacionMon";
+import { Data, Payload } from "../../../helpers/types/kafkaResponse";
 
-export class TpCreditoEntConsumer extends BaseConsumer {
-  topic = "tpcreditoent";
+export class TpDebitoEntConsumer extends BaseConsumer {
+  topic = "tpdebitoent";
 
   async handler(_data: any): Promise<any> {
     // async handler(data: Data, payload: EachMessagePayload): Promise<any> {

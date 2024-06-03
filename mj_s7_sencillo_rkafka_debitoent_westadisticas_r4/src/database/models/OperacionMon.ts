@@ -1,11 +1,9 @@
-/* eslint-disable indent */
-import { BaseEntity, Column, Entity, PrimaryColumn } from "typeorm";
-import { Data } from "../../types/kafkaResponse";
 import moment from "moment";
+import { getEnv } from "@ant/framework";
+import { BaseEntity, Column, Entity, PrimaryColumn } from "typeorm";
+import { Monitor as NewMonitor } from "../../../../helpers/classes/monitor";
 
-@Entity({
-  name: "tb_operacion_mon",
-})
+@Entity({ name: "tb_operacion_mon" })
 export class OperacionMon extends BaseEntity {
   @PrimaryColumn()
   tx_componente!: string;
@@ -42,38 +40,17 @@ export class OperacionMon extends BaseEntity {
 
   constructor(private res?: any) {
     super();
-    if (res?.data) {
-      const { CstmrCdtTrfInitn, CstmrPmtStsRpt } = this.res?.data as Data;
 
-      if (CstmrCdtTrfInitn) {
-        /** Dirección */
-        this.tx_direccion = "ENTRADA";
+    /** Componente */
+    this.tx_componente = "MFIBP";
 
-        /** Componente */
-        this.tx_componente = "MFIBP";
+    /** Dirección */
+    this.tx_direccion = getEnv("DIRECCION_OPERACION", "ENTRADA");
 
-        this.co_lclinstrm = CstmrCdtTrfInitn?.GrpHdr?.LclInstrm?.trim() || "";
-        this.co_purp = CstmrCdtTrfInitn?.PmtInf?.[0]?.Purp?.trim() || "";
-        this.ts_fecha = moment().format("YYYY-MM-DD");
-      }
+    /** Fecha */
+    this.ts_fecha = moment().format("YYYY-MM-DD");
 
-      if (CstmrPmtStsRpt) {
-        switch (CstmrPmtStsRpt.OrgnlGrpInfAndSts?.GrpSts) {
-          case "RJCT":
-            this.ca_liquidada = 0;
-            this.mo_liquidada = 0;
-            this.ca_rechazada = 1;
-            this.mo_rechazada = CstmrPmtStsRpt?.OrgnlGrpInfAndSts?.OrgnlCtrlSum?.Amt || 0;
-            break;
-
-          default:
-            this.ca_rechazada = 0;
-            this.mo_rechazada = 0;
-            this.ca_liquidada = 1;
-            this.mo_liquidada = CstmrPmtStsRpt?.OrgnlGrpInfAndSts?.OrgnlCtrlSum?.Amt || 0;
-            break;
-        }
-      }
-    }
+    /** Asignar propiedades */
+    Object.assign(this, new NewMonitor(res));
   }
 }

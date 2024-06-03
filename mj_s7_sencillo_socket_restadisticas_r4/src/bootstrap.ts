@@ -11,8 +11,9 @@ import { ListenerContract } from "@ant/framework/lib/src/events";
 /** Providers */
 import LogProvider from "./providers/log.provider";
 import TasksProvider from "./providers/tasks.provider";
+import KafkaProvider from "./providers/kafka.provider";
 import RouterProvider from "./providers/router.provider";
-// import DatabaseProvider from "./providers/database.provider";
+import DatabaseProvider from "./providers/database.provider";
 import SocketIoProvider from "./providers/socketIo.provider";
 
 /** Routes */
@@ -22,9 +23,6 @@ import { HomeRoute } from "./http/routes/home.route";
 import { MonTask } from "./tasks/mon.task";
 import { KafkaTask } from "./tasks/kafka.task";
 
-/** Consumers */
-import * as Consumers from "./consumers/index.consumer";
-
 export class Boostrap implements BoostrapInterface {
   /**
    * The declared application's service providers.
@@ -32,8 +30,9 @@ export class Boostrap implements BoostrapInterface {
   public providers: (new (boostrap: BoostrapInterface) => ServiceProviderContract)[] = [
     LogProvider,
     TasksProvider,
+    KafkaProvider,
     RouterProvider,
-    // DatabaseProvider,
+    DatabaseProvider,
     SocketIoProvider,
   ];
 
@@ -50,7 +49,7 @@ export class Boostrap implements BoostrapInterface {
   /**
    * The declared application's workers.
    */
-  public consumers: (new () => ConsumerContract)[] = Object.values(Consumers);
+  public consumers: (new () => ConsumerContract)[] = [];
 
   /**
    * The declared application's tasks.
