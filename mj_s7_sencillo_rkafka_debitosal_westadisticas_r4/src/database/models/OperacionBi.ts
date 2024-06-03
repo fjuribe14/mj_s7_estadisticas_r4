@@ -1,10 +1,10 @@
 import moment from "moment";
-import { Data } from "../../types/kafkaResponse";
+import { getEnv } from "@ant/framework";
+import { Data } from "../../../../helpers/types/kafkaResponse";
 import { BaseEntity, Column, Entity, PrimaryColumn } from "typeorm";
+import { Operacion as NewOperacion } from "../../../../helpers/classes/operacion";
 
-@Entity({
-  name: "tb_operacion_bi",
-})
+@Entity({ name: "tb_operacion_bi" })
 export class OperacionBi extends BaseEntity {
   @Column()
   tx_componente!: string;
@@ -34,10 +34,13 @@ export class OperacionBi extends BaseEntity {
   co_ccy!: string;
 
   @Column()
-  co_amt!: number;
+  mo_amt!: number;
 
   @Column()
   co_purp!: string;
+
+  @Column()
+  tx_addtlinf?: string;
 
   @Column()
   co_dbtragt!: string;
@@ -84,6 +87,9 @@ export class OperacionBi extends BaseEntity {
   @Column()
   tx_ip!: string;
 
+  @Column({ type: "json" })
+  js_rfrddocinf!: string;
+
   @Column()
   ts_fecha_timestamp_ins!: string;
 
@@ -93,67 +99,30 @@ export class OperacionBi extends BaseEntity {
   constructor(private res?: any) {
     super();
 
+    /** Dirección */
+    this.tx_direccion = getEnv("DIRECCION_OPERACION", "ENTRADA");
+
+    /** Componente */
+    this.tx_componente = "MFIBP";
+
     if (this.res?.data) {
-      const { CstmrCdtTrfInitn, CstmrPmtStsRpt } = this.res?.data as Data;
-
-      /** Crédito */
-      if (CstmrCdtTrfInitn) {
-        /** Estatus */
-        this.tx_sts = "AC00";
-
-        /** GrpHdr */
-        this.fe_credttm = CstmrCdtTrfInitn?.GrpHdr?.CreDtTm?.trim() || "";
-        this.co_channel = CstmrCdtTrfInitn?.GrpHdr?.Channel?.trim() || "";
-        this.id_msgid_entrada = CstmrCdtTrfInitn?.GrpHdr?.MsgId?.trim() || "";
-        this.co_lclinstrm = CstmrCdtTrfInitn?.GrpHdr?.LclInstrm?.trim() || "";
-        this.fe_fctvintrbksttlmdt = CstmrCdtTrfInitn?.GrpHdr?.IntrBkSttlmDt?.trim() || "";
-
-        /** PmtInf */
-        this.co_amt = CstmrCdtTrfInitn?.PmtInf?.[0]?.Amount?.Amt || 0;
-        this.co_purp = CstmrCdtTrfInitn?.PmtInf?.[0]?.Purp?.trim() || "";
-        this.co_ccy = CstmrCdtTrfInitn?.PmtInf?.[0]?.Amount?.Ccy?.trim() || "";
-        this.id_endtoendid = CstmrCdtTrfInitn?.PmtInf?.[0]?.EndToEndId?.trim() || "";
-
-        /** Acreedor */
-        this.id_cdtr = CstmrCdtTrfInitn?.PmtInf?.[0]?.Cdtr?.Id?.trim() || "";
-        this.co_cdtragt = CstmrCdtTrfInitn?.PmtInf?.[0]?.CdtrAgt?.trim() || "";
-        this.nb_cdtr_nm = CstmrCdtTrfInitn?.PmtInf?.[0]?.Cdtr?.Nm?.trim() || "";
-        this.id_cdtracct = CstmrCdtTrfInitn?.PmtInf?.[0]?.CdtrAcct?.Id?.trim() || "";
-        this.co_schema_cdtr = CstmrCdtTrfInitn?.PmtInf?.[0]?.Cdtr?.SchmeNm?.trim() || "";
-        this.co_schema_cdtracct = CstmrCdtTrfInitn?.PmtInf?.[0]?.CdtrAcct?.Tp?.trim() || "";
-
-        /** Deudor */
-        this.id_dbtr = CstmrCdtTrfInitn?.PmtInf?.[0]?.Dbtr?.Id?.trim() || "";
-        this.co_dbtragt = CstmrCdtTrfInitn?.PmtInf?.[0]?.DbtrAgt?.trim() || "";
-        this.nb_dbtr_nm = CstmrCdtTrfInitn?.PmtInf?.[0]?.Dbtr?.Nm?.trim() || "";
-        this.id_dbtracct = CstmrCdtTrfInitn?.PmtInf?.[0]?.DbtrAcct?.Id?.trim() || "";
-        this.co_schema_dbtr = CstmrCdtTrfInitn?.PmtInf?.[0]?.Dbtr?.SchmeNm?.trim() || "";
-        this.co_schema_dbtracct = CstmrCdtTrfInitn?.PmtInf?.[0]?.DbtrAcct?.Tp?.trim() || "";
-      }
+      const { CstmrPmtStsRpt } = this.res?.data as Data;
 
       /** Estatus report */
       if (CstmrPmtStsRpt) {
-        this.co_rsn = CstmrPmtStsRpt.OrgnlPmtInfAndSts?.[0].Rsn || "";
-        this.tx_sts = CstmrPmtStsRpt.OrgnlPmtInfAndSts?.[0].TxSts || "";
-        this.id_endtoendid = CstmrPmtStsRpt.OrgnlPmtInfAndSts?.[0].OrgnlEndToEndId || "";
-
         /** Fecha de actualización */
         this.ts_fecha_timestamp_upd = moment().toISOString();
       }
     }
 
-    if (this.res?.payload) {
-      const { message } = this.res.payload;
-
-      /** Dirección */
-      this.tx_direccion = "ENTRADA";
-
-      /** Componente */
-      this.tx_componente = "MFIBP";
-
-      /** Ip */
+    /** Payload */
+    if (this.res?.payload)
+      /** IP */
       this.tx_ip =
-        Buffer.from(message?.headers?.origen?.data || "").toString("utf8") || "localhost";
-    }
+        Buffer.from(this.res.payload?.message?.headers?.origen?.data || "").toString("utf8") ||
+        "172.0.0.1";
+
+    /** Asignar propiedades */
+    Object.assign(this, new NewOperacion(res));
   }
 }

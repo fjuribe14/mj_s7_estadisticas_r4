@@ -1,4 +1,4 @@
-import { TpCreditoEntConsumer } from "./tpcreditoent.consumer";
-import { TpCreditoEntRptestConsumer } from "./tpcreditoentrptest.consumer";
+import { TpDebitoSalConsumer } from "./tpdebitosal.consumer";
+import { TpDebitoSalRptestConsumer } from "./tpdebitosalrptest.consumer";
 
-export { TpCreditoEntConsumer, TpCreditoEntRptestConsumer };
+export { TpDebitoSalConsumer, TpDebitoSalRptestConsumer };

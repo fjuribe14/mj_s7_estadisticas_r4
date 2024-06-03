@@ -60,117 +60,120 @@ export class KafkaMesage {
   }
 
   data() {
-    switch (this.topic) {
-      case "tpcreditoentrptest":
-        return {
-          CstmrPmtStsRpt: {
-            GrpHdr: { MsgId: this.msgId(), CreDtTm: "2024-05-27T11:25:33.351" },
-            OrgnlGrpInfAndSts: {
-              OrgnlMsgId: "0116012021073011253058553026",
-              OrgnlCreDtTm: "2024-05-27T11:25:30.423",
-              OrgnlNbOfTxs: 1,
-              OrgnlCtrlSum: { Ccy: "VES", Amt: this.amt },
-              IntrBkSttlmDt: "2024-05-27",
-              GrpSts: this.sts(),
-            },
-            OrgnlPmtInfAndSts: [
-              {
-                OrgnlRegId: 1,
-                OrgnlEndToEndId: "01712022110219353390111379",
-                AccptncDtTm: "2024-05-27T11:25:30.423",
-                ClrSysRef: "VES011601162021073011253085717999",
-                OrgnlTxId: "011601162021073011253032394204",
-                TxSts: this.sts(),
-                Rsn: "AC01",
-                Amount: { Ccy: "VES", Amt: this.amt },
-                Purp: this.purp(),
-                DbtrAgt: "0116",
-                CdtrAgt: "0174",
-                DbtrAcct: { Tp: "CNTA", Id: "1561231315132132" },
-                CdtrAcct: { Tp: "CNTA", Id: "01741561231315132128" },
-                RmtInf: "BTC - Mensaje de prueba",
-              },
-            ],
+    const TxSts = this.sts();
+
+    if (this.topic?.endsWith("rptest")) {
+      return {
+        CstmrPmtStsRpt: {
+          GrpHdr: { MsgId: this.msgId(), CreDtTm: "2024-05-27T11:25:33.351" },
+          OrgnlGrpInfAndSts: {
+            OrgnlMsgId: "0116012021073011253058553026",
+            OrgnlCreDtTm: "2024-05-27T11:25:30.423",
+            OrgnlNbOfTxs: 1,
+            OrgnlCtrlSum: { Ccy: "VES", Amt: this.amt },
+            IntrBkSttlmDt: "2024-05-27",
+            GrpSts: TxSts,
           },
-        };
-      case "tpdebitoent":
-        return {
-          CstmrDrctDbtInitn: {
-            GrpHdr: {
-              MsgId: this.msgId(),
-              CreDtTm: "2024-05-27T18:07:09.198",
-              NbOfTxs: 1,
-              CtrlSum: { Ccy: "VES", Amt: this.amt },
-              IntrBkSttlmDt: "2024-05-27",
-              LclInstrm: this.lclInstrm(),
-              Channel: this.channel,
+          OrgnlPmtInfAndSts: [
+            {
+              OrgnlRegId: 1,
+              OrgnlEndToEndId: "01712022110219353390111379",
+              AccptncDtTm: "2024-05-27T11:25:30.423",
+              ClrSysRef: "VES011601162021073011253085717999",
+              OrgnlTxId: "011601162021073011253032394204",
+              TxSts: TxSts,
+              Rsn: TxSts === "RJCT" ? "VE01" : "",
+              Amount: { Ccy: "VES", Amt: this.amt },
+              Purp: this.purp(),
+              DbtrAgt: "0116",
+              CdtrAgt: "0174",
+              DbtrAcct: { Tp: "CNTA", Id: "1561231315132132" },
+              CdtrAcct: { Tp: "CNTA", Id: "01741561231315132128" },
+              RmtInf: "BTC - Mensaje de prueba",
             },
-            PmtInf: [
-              {
-                RegId: 1,
-                EndToEndId: this.endToEndId(),
-                ClrSysRef: "VES015701572024052718070949865470",
-                TxId: "015701572024052718070984990676",
-                Amount: { Ccy: "VES", Amt: this.amt },
-                Purp: this.purp(),
-                DbtrAgt: "0157",
-                CdtrAgt: "0001",
-                Dbtr: { Nm: faker.person.fullName(), Id: "V37789462", SchmeNm: "SCID" },
-                DbtrAcct: { Tp: "CNTA", Id: "1561231315132124" },
-                Cdtr: { Nm: faker.person.fullName(), Id: " V01961099", SchmeNm: "SCID" },
-                CdtrAcct: { Tp: "CNTA", Id: "00012831484649473131" },
-                RmtInf: "BTC - Mensaje de prueba",
-                AddtlInf: _.random(100000, 999999),
-                RfrdDocInf: [
-                  {
-                    CdOrPrtry: "CINV",
-                    Nb: "92214782",
-                    RltdDt: "2024-06-03",
-                    RjctDt: "2024-06-03",
-                    DuePyblAmt: { Ccy: "VES", Amt: this.amt },
-                  },
-                  {
-                    CdOrPrtry: "CMCN",
-                    Nb: "32823430",
-                    RltdDt: "2024-06-03",
-                  },
-                ],
-              },
-            ],
-          },
-        };
-      default:
-        return {
-          CstmrCdtTrfInitn: {
-            GrpHdr: {
-              MsgId: this.msgId(),
-              CreDtTm: "2024-05-27T18:07:09.198",
-              NbOfTxs: 1,
-              CtrlSum: { Ccy: "VES", Amt: this.amt },
-              IntrBkSttlmDt: "2024-05-27",
-              LclInstrm: this.lclInstrm(),
-              Channel: this.channel,
-            },
-            PmtInf: [
-              {
-                RegId: 1,
-                EndToEndId: this.endToEndId(),
-                ClrSysRef: "VES015701572024052718070949865470",
-                TxId: "015701572024052718070984990676",
-                Amount: { Ccy: "VES", Amt: this.amt },
-                Purp: this.purp(),
-                DbtrAgt: "0157",
-                CdtrAgt: "0001",
-                Dbtr: { Nm: faker.person.fullName(), Id: "V37789462", SchmeNm: "SCID" },
-                DbtrAcct: { Tp: "CNTA", Id: "1561231315132124" },
-                Cdtr: { Nm: faker.person.fullName(), Id: " V01961099", SchmeNm: "SCID" },
-                CdtrAcct: { Tp: "CNTA", Id: "00012831484649473131" },
-                RmtInf: "BTC - Mensaje de prueba",
-              },
-            ],
-          },
-        };
+          ],
+        },
+      };
     }
+
+    if (this.topic === "tpdebitoent") {
+      return {
+        CstmrDrctDbtInitn: {
+          GrpHdr: {
+            MsgId: this.msgId(),
+            CreDtTm: "2024-05-27T18:07:09.198",
+            NbOfTxs: 1,
+            CtrlSum: { Ccy: "VES", Amt: this.amt },
+            IntrBkSttlmDt: "2024-05-27",
+            LclInstrm: this.lclInstrm(),
+            Channel: this.channel,
+          },
+          PmtInf: [
+            {
+              RegId: 1,
+              EndToEndId: this.endToEndId(),
+              ClrSysRef: "VES015701572024052718070949865470",
+              TxId: "015701572024052718070984990676",
+              Amount: { Ccy: "VES", Amt: this.amt },
+              Purp: this.purp(),
+              DbtrAgt: "0157",
+              CdtrAgt: "0001",
+              Dbtr: { Nm: faker.person.fullName(), Id: "V37789462", SchmeNm: "SCID" },
+              DbtrAcct: { Tp: "CNTA", Id: "1561231315132124" },
+              Cdtr: { Nm: faker.person.fullName(), Id: " V01961099", SchmeNm: "SCID" },
+              CdtrAcct: { Tp: "CNTA", Id: "00012831484649473131" },
+              RmtInf: "BTC - Mensaje de prueba",
+              AddtlInf: _.random(100000, 999999),
+              RfrdDocInf: [
+                {
+                  CdOrPrtry: "CINV",
+                  Nb: "92214782",
+                  RltdDt: "2024-06-03",
+                  RjctDt: "2024-06-03",
+                  DuePyblAmt: { Ccy: "VES", Amt: this.amt },
+                },
+                {
+                  CdOrPrtry: "CMCN",
+                  Nb: "32823430",
+                  RltdDt: "2024-06-03",
+                },
+              ],
+            },
+          ],
+        },
+      };
+    }
+
+    return {
+      CstmrCdtTrfInitn: {
+        GrpHdr: {
+          MsgId: this.msgId(),
+          CreDtTm: "2024-05-27T18:07:09.198",
+          NbOfTxs: 1,
+          CtrlSum: { Ccy: "VES", Amt: this.amt },
+          IntrBkSttlmDt: "2024-05-27",
+          LclInstrm: this.lclInstrm(),
+          Channel: this.channel,
+        },
+        PmtInf: [
+          {
+            RegId: 1,
+            EndToEndId: this.endToEndId(),
+            ClrSysRef: "VES015701572024052718070949865470",
+            TxId: "015701572024052718070984990676",
+            Amount: { Ccy: "VES", Amt: this.amt },
+            Purp: this.purp(),
+            DbtrAgt: "0157",
+            CdtrAgt: "0001",
+            Dbtr: { Nm: faker.person.fullName(), Id: "V37789462", SchmeNm: "SCID" },
+            DbtrAcct: { Tp: "CNTA", Id: "1561231315132124" },
+            Cdtr: { Nm: faker.person.fullName(), Id: " V01961099", SchmeNm: "SCID" },
+            CdtrAcct: { Tp: "CNTA", Id: "00012831484649473131" },
+            RmtInf: "BTC - Mensaje de prueba",
+          },
+        ],
+      },
+    };
   }
 
   request() {

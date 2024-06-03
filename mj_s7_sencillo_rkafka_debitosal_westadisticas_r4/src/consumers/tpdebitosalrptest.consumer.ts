@@ -4,8 +4,8 @@ import { OperacionBi } from "../database/models/OperacionBi";
 import { Operacion } from "../../../helpers/classes/operacion";
 import { Data, Payload } from "../../../helpers/types/kafkaResponse";
 
-export class TpCreditoEntRptestConsumer extends BaseConsumer {
-  topic = "tpcreditoentrptest";
+export class TpDebitoSalRptestConsumer extends BaseConsumer {
+  topic = "tpdebitosalrptest";
 
   async handler(_data: any): Promise<any> {
     // async handler(data: Data, payload: EachMessagePayload): Promise<any> {
