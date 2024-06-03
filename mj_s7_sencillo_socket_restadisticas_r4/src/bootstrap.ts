@@ -10,10 +10,9 @@ import { ListenerContract } from "@ant/framework/lib/src/events";
 
 /** Providers */
 import LogProvider from "./providers/log.provider";
-import KafkaProvider from "./providers/kafka.provider";
 import TasksProvider from "./providers/tasks.provider";
 import RouterProvider from "./providers/router.provider";
-import DatabaseProvider from "./providers/database.provider";
+// import DatabaseProvider from "./providers/database.provider";
 import SocketIoProvider from "./providers/socketIo.provider";
 
 /** Routes */
@@ -32,10 +31,9 @@ export class Boostrap implements BoostrapInterface {
    */
   public providers: (new (boostrap: BoostrapInterface) => ServiceProviderContract)[] = [
     LogProvider,
-    KafkaProvider,
     TasksProvider,
     RouterProvider,
-    DatabaseProvider,
+    // DatabaseProvider,
     SocketIoProvider,
   ];
 

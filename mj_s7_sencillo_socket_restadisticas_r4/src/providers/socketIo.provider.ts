@@ -15,8 +15,12 @@ export default class SocketIoProvider extends ServiceProvider {
         });
       });
 
-      this.io.listen(Number(getEnv("SOCKET_IO_PORT", "3000")));
-      Logger.info("Servidor Socket.IO escuchando en el puerto 3000");
+      this.io.listen(Number(getEnv("APP_SOCKET_IO_PORT", "3000")));
+
+      Logger.info(
+        `Socket.IO server is running at [http://localhost:${getEnv("APP_SOCKET_IO_PORT", "3000")}]`
+      );
+
       resolve();
     });
   }
