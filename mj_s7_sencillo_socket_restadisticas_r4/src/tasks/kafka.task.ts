@@ -13,7 +13,7 @@ export class KafkaTask extends BaseTask {
     // "tpdebitoent",
     // "tpdebitoentrptest",
     // "tpdebitosal",
-    "tpdebitosalrptest",
+    // "tpdebitosalrptest",
     // "tpcreditosalrptest",
     // "tpinterent",
     // "tpintersal",
