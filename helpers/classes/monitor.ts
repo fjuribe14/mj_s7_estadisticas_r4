@@ -1,4 +1,4 @@
-import { Data } from "../types/kafkaResponse";
+import { Data } from "../types";
 
 export class Monitor {
   public tx_componente!: string;

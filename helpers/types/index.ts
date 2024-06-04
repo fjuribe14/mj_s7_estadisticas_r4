@@ -1,5 +1,12 @@
-import { type Operacion } from "./operacion";
-import { type EstatusReport } from "./estatusReport";
-import { type KafkaResponse } from "./kafkaResponse";
+import { CstmrCdtTrfInitn, CstmrDrctDbtInitn, CstmrPmtStsRpt, AuthstnReq } from "./operacion";
+import { KafkaResponse, Data, Payload } from "./kafkaResponse";
 
-export { Operacion, EstatusReport, KafkaResponse };
+export type {
+  CstmrPmtStsRpt,
+  CstmrCdtTrfInitn,
+  CstmrDrctDbtInitn,
+  AuthstnReq,
+  Data,
+  Payload,
+  KafkaResponse,
+};

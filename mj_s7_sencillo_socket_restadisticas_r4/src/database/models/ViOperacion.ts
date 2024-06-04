@@ -1,7 +1,7 @@
 import { BaseEntity, Column, Entity, PrimaryColumn } from "typeorm";
 
-@Entity({ name: "vi_operacion_bi" })
-export class ViOperacionBi extends BaseEntity {
+@Entity({ name: "vi_operacion" })
+export class ViOperacion extends BaseEntity {
   @PrimaryColumn()
   tx_componente!: string;
 
@@ -13,9 +13,6 @@ export class ViOperacionBi extends BaseEntity {
 
   @PrimaryColumn()
   co_lclinstrm!: string;
-
-  // @PrimaryColumn()
-  // co_purp!: string;
 
   @Column()
   ca_liquidada!: number;

@@ -3,7 +3,7 @@ import { Data } from "../../types/kafkaResponse";
 import { BaseEntity, Column, Entity, PrimaryColumn } from "typeorm";
 
 @Entity({
-  name: "tb_operacion_bi",
+  name: "tb_operacion",
 })
 export class OperacionBi extends BaseEntity {
   @Column()

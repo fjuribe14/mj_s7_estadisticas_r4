@@ -4,7 +4,7 @@ import { Data } from "../../../../helpers/types/kafkaResponse";
 import { BaseEntity, Column, Entity, PrimaryColumn } from "typeorm";
 import { Operacion as NewOperacion } from "../../../../helpers/classes/operacion";
 
-@Entity({ name: "tb_operacion_bi" })
+@Entity({ name: "tb_operacion" })
 export class OperacionBi extends BaseEntity {
   @Column()
   tx_componente!: string;

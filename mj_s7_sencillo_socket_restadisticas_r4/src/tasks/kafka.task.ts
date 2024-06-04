@@ -7,14 +7,17 @@ export class KafkaTask extends BaseTask {
   cronExpression = "*/5 * * * * *";
 
   topics = [
-    // "tpcreditoent",
-    // "tpcreditoentrptest",
-    // "tpcreditosal",
-    // "tpcreditosalrptest",
-    // "tpdebitoent",
-    // "tpdebitoentrptest",
-    // "tpdebitosal",
-    // "tpdebitosalrptest",
+    "tpcreditoent",
+    "tpcreditoentrptest",
+    "tpcreditosal",
+    "tpcreditosalrptest",
+    "tpdebitoent",
+    "tpdebitoentrptest",
+    "tpdebitosal",
+    "tpdebitosalrptest",
+    "tpotpent",
+    "tpotpsal",
+    /** TODO : Revisar estos topics */
     // "tpinterent",
     // "tpintersal",
     // "tpinterentrptest",
@@ -23,8 +26,6 @@ export class KafkaTask extends BaseTask {
     // "tpintrasal",
     // "tpintraentrptest",
     // "tpintrasalrptest",
-    // "tpotpent",
-    // "tpotpsal",
   ];
 
   async handler(): Promise<void> {

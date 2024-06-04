@@ -35,6 +35,7 @@ export class KafkaMesage {
 
   lclInstrm() {
     if (this.topic) {
+      if (this.topic?.startsWith("tpotp")) return "050";
       if (this.tpdebitolclInstrm.includes(this.topic)) return "050";
       if (this.tpcrebitolclInstrm.includes(this.topic)) return "040";
     }
@@ -138,6 +139,56 @@ export class KafkaMesage {
                   RltdDt: "2024-06-03",
                 },
               ],
+            },
+          ],
+        },
+      };
+    }
+
+    if (this.topic?.startsWith("tpotp")) {
+      return {
+        AuthstnReq: {
+          GrpHdr: {
+            MsgId: this.msgId(),
+            CreDtTm: "2021-07-07T08:19:00",
+            InitgPty: {
+              Id: "123456",
+              Nm: "ABCD",
+            },
+            InitnSrc: {
+              Nm: "1234",
+              Prvdr: "ABCD",
+              Vrsn: "1.0",
+            },
+          },
+          Initn: [
+            {
+              MndtRltdInf: {
+                LclInstrm: this.lclInstrm(),
+                MndtId: "01142020062418222012345671",
+              },
+              Amount: {
+                Ccy: "VES",
+                Amt: this.amt,
+              },
+              DbtrAgt: "0001",
+              DbtrAcct: {
+                Tp: "CNTA",
+                Id: "01141631566123456789",
+              },
+              Dbtr: {
+                Id: "J404579427",
+                SchmeNm: "SRIF",
+              },
+              CdtrAgt: "0102",
+              Cdtr: {
+                Id: "V15555666",
+                SchmeNm: "SCID",
+              },
+              CdtrAcct: {
+                Tp: "CNTA",
+                Id: "09990234871234567890",
+              },
             },
           ],
         },

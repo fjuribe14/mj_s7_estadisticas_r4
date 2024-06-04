@@ -20,8 +20,8 @@ import SocketIoProvider from "./providers/socketIo.provider";
 import { HomeRoute } from "./http/routes/home.route";
 
 /** Tasks */
-import { MonTask } from "./tasks/mon.task";
 import { KafkaTask } from "./tasks/kafka.task";
+import { MonitoreoTask } from "./tasks/MonitoreoTask.task";
 
 export class Boostrap implements BoostrapInterface {
   /**
@@ -54,7 +54,7 @@ export class Boostrap implements BoostrapInterface {
   /**
    * The declared application's tasks.
    */
-  public tasks: (new () => TaskContract)[] = [KafkaTask, MonTask];
+  public tasks: (new () => TaskContract)[] = [KafkaTask, MonitoreoTask];
 
   /**
    * The declared application's event listeners.
